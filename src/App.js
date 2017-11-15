@@ -14,14 +14,15 @@ class App extends Component {
   }
 
   handleStart = () => {
-    this.context.router.history.push('/firstview');
+    localStorage.clear();
+    this.context.router.history.push('/createsplit');
   }
   render() {
     return (
       <div className="App">
         <Header />
         <Jumbotron>
-          <h1>Split your expenses</h1>
+          <h1>Show expenses your expenses</h1>
           <Button bsStyle="primary" bsSize="large" onClick={this.handleStart}>
                 Start
           </Button>

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {Switch, Route} from 'react-router-dom';
 import App from './App';
-import FirstView from './FirstView';
+import CreateSplitView from './CreateSplitView';
+import ExpensesView from './ExpensesView';
 
 class Boot extends Component {
   static contextTypes = {
@@ -17,7 +18,8 @@ class Boot extends Component {
       <div>
         <Switch>
           <Route exact path="/" component={App} />
-          <Route path="/firstview" component={FirstView} />
+          <Route path="/createsplit" component={CreateSplitView} />
+          <Route path="/expenses" component={ExpensesView} />
         </Switch>
       </div>
     );
