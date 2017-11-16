@@ -77,9 +77,9 @@ class CreateSplitView extends Component {
     const { name, email, phoneNumber, participantContribution } = this.state;
     const participant = {};
     if (name.length <= 0) {
-      this.setState({ nameValidationMessage: "Please enter participant name" });
+      this.setState({ nameValidationMessage: "Please enter the participant name" });
     } else if (email.length <= 0) {
-      this.setState({ emailValidationMessage: "Please enter email" });
+      this.setState({ emailValidationMessage: "Please enter the email" });
     } else {
       if (validator.validate(email)) {
         this.setState({ nameValidationMessage: "" });
@@ -107,7 +107,7 @@ class CreateSplitView extends Component {
           localStorage.setItem("participants", JSON.stringify(participants));
         }
         const allParticipants = JSON.parse(localStorage.getItem('participants'));
-        this.setState({ allParticipants});
+        this.setState({ allParticipants });
         this.setState({ name: "", email: '', phoneNumber: '', participantContribution: 0 });
       } else {
         this.setState({ emailValidationMessage: "Please enter valid email" });
@@ -118,22 +118,19 @@ class CreateSplitView extends Component {
 
   }
   handleCalculate = () => {
-    
+
 
     if (this.state.amount.length <= 0) {
       this.setState({ amountValidationMessage: 'Please enter the total amount' });
-    } else {
-      this.setState({ amountValidationMessage: '' });
-    }
-
-    if (this.state.myContribution.length <= 0) {
+    } else if (this.state.myContribution.length <= 0) {
       this.setState({ myContributionValidationMessage: 'Please enter your contribution' });
     } else {
-      this.setState({ myContributionValidationMessage: '' });
+      this.setState({ amountValidationMessage: '', myContributionValidationMessage:'' });
+      const creator = { totalAmount: this.state.amount, creatorContribution: this.state.myContribution, currency: this.state.currency };
+      localStorage.setItem("creator", JSON.stringify(creator));
+      this.context.router.history.push('/expenses');
     }
-    const creator = { totalAmount: this.state.amount, creatorContribution: this.state.myContribution, currency: this.state.currency };
-    localStorage.setItem("creator", JSON.stringify(creator));
-    this.context.router.history.push('/expenses');
+
   }
 
   handleReset = () => {
@@ -174,7 +171,7 @@ class CreateSplitView extends Component {
                       placeholder="100"
                       onChange={this.handleAmountChange}
                     />
-                    <HelpBlock>{this.state.amountValidationMessage}</HelpBlock>
+                    <HelpBlock className="help-block">{this.state.amountValidationMessage}</HelpBlock>
                   </FormGroup>
                   <FormGroup
                     controlId="formBasicText"
@@ -187,7 +184,7 @@ class CreateSplitView extends Component {
                       placeholder="50"
                       onChange={this.handleMyContributionChange}
                     />
-                    <HelpBlock>{this.state.myContributionValidationMessage}</HelpBlock>
+                    <HelpBlock className="help-block">{this.state.myContributionValidationMessage}</HelpBlock>
                   </FormGroup>
                   <FormGroup controlId="formControlsSelect">
                     <ControlLabel>Currency</ControlLabel>
@@ -214,7 +211,7 @@ class CreateSplitView extends Component {
                     placeholder="Laura"
                     onChange={this.handleNameChange}
                   />
-                  <HelpBlock>{this.state.nameValidationMessage}</HelpBlock>
+                  <HelpBlock className="help-block">{this.state.nameValidationMessage}</HelpBlock>
                 </FormGroup>
                 <FormGroup
                   controlId="formNameText"
@@ -227,7 +224,7 @@ class CreateSplitView extends Component {
                     placeholder="email"
                     onChange={this.handleEmailChange}
                   />
-                  <HelpBlock>{this.state.emailValidationMessage}</HelpBlock>
+                  <HelpBlock className="help-block">{this.state.emailValidationMessage}</HelpBlock>
                 </FormGroup>
                 <FormGroup
                   controlId="formNameText"
