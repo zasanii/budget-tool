@@ -28,12 +28,14 @@ class ExpensesView extends Component {
     this.setState({totalAmount: creator.totalAmount, currency: creator.currency, mycontribution:creator.creatorContribution});
   }
 
-  calucateShare () {
+  calcuateShare () {
     const numberOfParticipants = this.state.allParticipants.length + 1;
+    const participants = this.state.allParticipants;
+    
     return this.state.totalAmount/numberOfParticipants;
   }
   render() {
-    const share = this.calucateShare();
+    const share = this.calcuateShare();
     return (
       <div className="App">
         <Header />

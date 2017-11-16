@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import validator from 'email-validator';
+import { parse, format, asYouType, isValidNumber } from 'libphonenumber-js'
 import { Grid, Row, Col, Button, FormGroup, ControlLabel, FormControl, Jumbotron, HelpBlock, Alert } from 'react-bootstrap';
 import Header from './Header';
 
@@ -23,7 +24,9 @@ class CreateSplitView extends Component {
     emailValidationMessage: '',
     currency: 'CHF',
     phoneNumber: '',
+    phoneNumberValidationMessage: '',
     participantContribution: 0,
+    partContributionValidationMessage: '',
     infoMessage: '',
     allParticipants: null,
   }
@@ -40,7 +43,9 @@ class CreateSplitView extends Component {
     emailValidationMessage: '',
     currency: 'CHF',
     phoneNumber: '',
+    phoneNumberValidationMessage: '',
     participantContribution: 0,
+    partContributionValidationMessage: '',
     infoMessage: '',
     allParticipants: null,
   }
@@ -73,17 +78,23 @@ class CreateSplitView extends Component {
     this.setState({ currency: event.target.value });
   };
 
-  handleAddParicipant = () => {
+  handleAddParticipant = () => {
     const { name, email, phoneNumber, participantContribution } = this.state;
     const participant = {};
     if (name.length <= 0) {
       this.setState({ nameValidationMessage: "Please enter the participant name" });
     } else if (email.length <= 0) {
       this.setState({ emailValidationMessage: "Please enter the email" });
+    } else if(isNaN(participantContribution)) {
+      this.setState({ partContributionValidationMessage: "Please provide a number here" });
+    } else if(!isValidNumber(phoneNumber)) {
+      this.setState({ phoneNumberValidationMessage: "Please provide a valid phone number here" });
     } else {
       if (validator.validate(email)) {
         this.setState({ nameValidationMessage: "" });
         this.setState({ emailValidationMessage: "" });
+        this.setState({ phoneNumberValidationMessage: "" });
+        this.setState({ partContributionValidationMessage: "" });
         if (localStorage.getItem('participants')) {
           const participants = JSON.parse(localStorage.getItem('participants'));
           if (participants.length >= 5) {
@@ -122,8 +133,12 @@ class CreateSplitView extends Component {
 
     if (this.state.amount.length <= 0) {
       this.setState({ amountValidationMessage: 'Please enter the total amount' });
+    } else if(isNaN(this.state.amount)) {
+      this.setState({ amountValidationMessage: 'Please enter a valid number here' });      
     } else if (this.state.myContribution.length <= 0) {
       this.setState({ myContributionValidationMessage: 'Please enter your contribution' });
+    } else if(isNaN(this.state.myContribution)) {
+      this.setState({ amountValidationMessage: 'Please enter a valid number here' });      
     } else {
       this.setState({ amountValidationMessage: '', myContributionValidationMessage:'' });
       const creator = { totalAmount: this.state.amount, creatorContribution: this.state.myContribution, currency: this.state.currency };
@@ -131,6 +146,14 @@ class CreateSplitView extends Component {
       this.context.router.history.push('/expenses');
     }
 
+  }
+
+  componentWillMount() {
+    if (localStorage.getItem('participants')) {      
+      let participants = JSON.parse(localStorage.getItem('participants'));
+      this.setState({ allParticipants: participants });
+      console.log('data',localStorage);
+    }
   }
 
   handleReset = () => {
@@ -238,6 +261,7 @@ class CreateSplitView extends Component {
                     onChange={this.handlePhoneChange}
 
                   />
+                  <HelpBlock className="help-block">{this.state.phoneNumberValidationMessage}</HelpBlock>
                 </FormGroup>
                 <FormGroup
                   controlId="formNameText"
@@ -251,10 +275,11 @@ class CreateSplitView extends Component {
                     onChange={this.handleContributionChange}
 
                   />
+                  <HelpBlock className="help-block">{this.state.partContributionValidationMessage}</HelpBlock>
                 </FormGroup>
                 <FormGroup>
                   <Col smOffset={11} sm={12}>
-                    <Button type="submit" onClick={this.handleAddParicipant}>
+                    <Button type="submit" onClick={this.handleAddParticipant}>
                       <span className="glyphicon glyphicon-plus"></span>
                     </Button>
                   </Col>
