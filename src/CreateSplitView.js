@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import validator from 'email-validator';
-import { parse, format, asYouType, isValidNumber } from 'libphonenumber-js'
+import { isValidNumber } from 'libphonenumber-js'
 import { Grid, Row, Col, Button, FormGroup, ControlLabel, FormControl, Jumbotron, HelpBlock, Alert } from 'react-bootstrap';
 import Header from './Header';
 
@@ -87,7 +87,7 @@ class CreateSplitView extends Component {
       this.setState({ emailValidationMessage: "Please enter the email" });
     } else if(isNaN(participantContribution)) {
       this.setState({ partContributionValidationMessage: "Please provide a number here" });
-    } else if(!isValidNumber(phoneNumber)) {
+    } else if(phoneNumber!=null && !isValidNumber(phoneNumber)) {
       this.setState({ phoneNumberValidationMessage: "Please provide a valid phone number here" });
     } else {
       if (validator.validate(email)) {

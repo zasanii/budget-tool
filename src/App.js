@@ -22,7 +22,7 @@ class App extends Component {
       <div className="App">
         <Header />
         <Jumbotron>
-          <h1>Show expenses your expenses</h1>
+          <h1>Show your expenses</h1>
           <Button bsStyle="primary" bsSize="large" onClick={this.handleStart}>
                 Start
           </Button>
